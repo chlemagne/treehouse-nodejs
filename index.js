@@ -1,6 +1,7 @@
 const winston = require('winston');
 const express = require('express');
-const demo = require('./routes/demo')
+const mongoose = require('mongoose');
+const houses = require('./routes/houses');
 require('express-async-errors');
 
 const app = express();
@@ -27,7 +28,7 @@ if (process.env.NODE_ENV !== 'production') {
 *** START ROUTES
 *******************************************************************************/
 app.use(express.json());
-app.use('/api/demo', demo)
+app.use('/api/houses', houses)
 // add endpoints before this line
 app.use(function(err, req, res, next) {
     winston.error(err.message, err);
@@ -37,6 +38,9 @@ app.use(function(err, req, res, next) {
 /*******************************************************************************
 *** START MONGODB
 *******************************************************************************/
+const db = 'mongodb://localhost/treehouse';
+mongoose.connect(db)
+    .then(() => winston.info(`Connected to ${db}...`));
 
 /*******************************************************************************
 *** READ CONFIG
