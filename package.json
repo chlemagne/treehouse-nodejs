@@ -1,5 +1,8 @@
 {
   "name": "treehouse-nodejs",
+  "jest": {
+    "testEnvironment": "node"
+  },
   "version": "1.0.0",
   "description": "Treehouse Express Backend",
   "main": "index.js",

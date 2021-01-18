@@ -32,7 +32,7 @@ app.use(express.json());
 app.use('/api/houses', houses)
 // add endpoints before this line
 app.use(function(err, req, res, next) {
-    winston.error(err.message, err);
+    logger.error(err.message, err);
     res.status(500).send('Something went wrong.');
 });
 
@@ -40,8 +40,10 @@ app.use(function(err, req, res, next) {
 *** START MONGODB
 *******************************************************************************/
 const db = config.get('db');
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
 mongoose.connect(db)
-    .then(() => winston.info(`Connected to ${db}...`));
+    .then(() => logger.info(`Connected to ${db}...`));
 
 /*******************************************************************************
 *** READ CONFIG
@@ -51,6 +53,6 @@ mongoose.connect(db)
 *** START APP
 *******************************************************************************/
 const port = process.env.PORT || 3000;
-const server = app.listen(port, () => winston.info(`Listening at port ${port}...`));
+const server = app.listen(port, () => logger.info(`Listening at port ${port}...`));
 
 module.exports = server;
