@@ -47,28 +47,36 @@ describe('/api/houses', () => {
         });
 
         // 404 Not Found
-        // it('should return 404 if invalid id is passed', async () => {
-        //     const res = await request(server).get('/api/houses/1');
+        it('should return 404 if invalid id is passed', async () => {
+            const res = await request(server).get('/api/houses/1');
 
-        //     expect(res.status).toBe(404);
-        // });
+            expect(res.status).toBe(404);
+        });
 
         // 404 Not Found
-        // it('should return 404 if no house with given id exists', async () => {
-        //     const id = mongoose.Types.ObjectId();
-        //     const res = await request(server).get('/api/houses/' + id);
+        it('should return 404 if no house with given id exists', async () => {
+            const id = mongoose.Types.ObjectId();
+            const res = await request(server).get('/api/houses/' + id);
       
-        //     expect(res.status).toBe(404);
-        // });
+            expect(res.status).toBe(404);
+        });
     });
 
     describe('POST /', () => {
+        // test variables
+        let name;
+
         // define happy path
         const post = async function() {
             return await request(server)
                 .post('/api/houses')
-                .send({ name: 'Unit G9' });
+                .send({ name });
         }
+
+        // setup
+        beforeEach(function() {
+            name = 'Unit G9';
+        });
 
         // verify in mongoDB
         it('should save the house if valid', async () => {
@@ -88,6 +96,14 @@ describe('/api/houses', () => {
             expect(res.body).toHaveProperty('name', 'Unit G9');
         });
 
+        // 400 bad request
+        it('should return 400 if name is not valid', async () => {
+            name = 'AAAAAAAAAA, BBBBBBBBBB, CCCCCCCCCC, DDDDDDDDDD, EEEEEEEEEE';
+
+            const res = await post();
+
+            expect(res.status).toBe(400);
+        });
     });
 
     describe('PUT /id', () => {
@@ -129,21 +145,30 @@ describe('/api/houses', () => {
             expect(res.body).toHaveProperty('name', 'Unit K7');
         });
 
+        // 400
+        it('should return 400 if name is invalid', async () => {
+            newName = 'AAAAAAAAAA, BBBBBBBBBB, CCCCCCCCCC, DDDDDDDDDD, EEEEEEEEEE';
+
+            const res = await put();
+
+            expect(res.status).toBe(400);
+        });
+
         // 404
-        // it('should return 404 if id is invalid', async () => {
-        //     id = 1;
-        //     const res = await put();
+        it('should return 404 if id is invalid', async () => {
+            id = 1;
+            const res = await put();
 
-        //     expect(res.status).toBe(404);
-        // });
+            expect(res.status).toBe(404);
+        });
 
         // 404
-        // it('should return 404 if given id is not found', async () => {
-        //     id = mongoose.Types.ObjectId();
-        //     const res = await put();
+        it('should return 404 if given id is not found', async () => {
+            id = mongoose.Types.ObjectId();
+            const res = await put();
 
-        //     expect(res.status).toBe(404);
-        // });
+            expect(res.status).toBe(404);
+        });
 
     });
 
@@ -186,21 +211,21 @@ describe('/api/houses', () => {
         });
 
         // 404
-        // it('should return 404 if id is invalid', async () => {
-        //     id = 1;
+        it('should return 404 if id is invalid', async () => {
+            id = 1;
 
-        //     const res = await _delete();
+            const res = await _delete();
 
-        //     expect(res.status).toBe(404);
-        // });
+            expect(res.status).toBe(404);
+        });
 
         // 404
-        // it('should return 404 id given id is not found', async () => {
-        //     id = moongose.Types.ObjectId();
+        it('should return 404 id given id is not found', async () => {
+            id = mongoose.Types.ObjectId();
 
-        //     const res = await _delete();
+            const res = await _delete();
 
-        //     expect(res.status).toBe(404);
-        // });
+            expect(res.status).toBe(404);
+        });
     });
 });
