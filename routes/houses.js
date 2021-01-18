@@ -9,7 +9,7 @@ const router = express.Router();
 *******************************************************************************/
 router.get('/', async (req, res) => {
     const houses = await House.find().sort('-dateAdded');
-    res.send(houses);
+    res.status(200).json(houses);
 });
 
 /*******************************************************************************

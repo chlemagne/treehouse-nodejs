@@ -1,3 +1,4 @@
+const config = require('config');
 const winston = require('winston');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -38,7 +39,7 @@ app.use(function(err, req, res, next) {
 /*******************************************************************************
 *** START MONGODB
 *******************************************************************************/
-const db = 'mongodb://localhost/treehouse';
+const db = config.get('db');
 mongoose.connect(db)
     .then(() => winston.info(`Connected to ${db}...`));
 
@@ -49,5 +50,7 @@ mongoose.connect(db)
 /*******************************************************************************
 *** START APP
 *******************************************************************************/
-const port = 3000;
+const port = process.env.PORT || 3000;
 const server = app.listen(port, () => winston.info(`Listening at port ${port}...`));
+
+module.exports = server;

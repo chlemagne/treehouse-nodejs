@@ -4,11 +4,12 @@
   "description": "Treehouse Express Backend",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll --verbose"
+    "test": "jest --watchAll --verbose --detectOpenHandles"
   },
   "author": "Charlemagne E. Hernani",
   "license": "ISC",
   "dependencies": {
+    "config": "^3.3.3",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "mongoose": "^5.11.11",
