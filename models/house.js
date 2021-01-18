@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const mongoose = require('mongoose');
 
 const houseSchema = new mongoose.Schema({
@@ -14,4 +15,9 @@ const houseSchema = new mongoose.Schema({
 
 const House = mongoose.model('House', houseSchema);
 
+const validationSchema = Joi.object({
+    name: Joi.string().max(50).required()
+});
+
 exports.House = House;
+exports.houseValidationSchema = validationSchema;
