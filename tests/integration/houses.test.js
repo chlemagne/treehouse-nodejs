@@ -82,7 +82,7 @@ describe('/api/houses', () => {
         it('should save the house if valid', async () => {
             await post();
 
-            const house = House.find({ name: 'Unit G9' });
+            const house = await House.find({ name: 'Unit G9' });
 
             expect(house).not.toBeNull();
         });

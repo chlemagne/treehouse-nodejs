@@ -41,9 +41,18 @@ describe('api/users', () => {
         it('should save user if valid', async () => {
             await post();
 
-            const user = User.find({ email: 'kyuubi9t@gmail.com' });
+            const user = await User.find({ email: 'kyuubi9t@gmail.com' });
 
             expect(user).not.toBeNull();
+        });
+
+        // encrypt password in mongoDB
+        it('should not store the password as plain text in db', async () => {
+            await post();
+
+            const user = await User.findOne({ email: 'kyuubi9t@gmail.com' });
+
+            expect(user.password).not.toBe('DefendK0n0h@_');
         });
 
         // 200
