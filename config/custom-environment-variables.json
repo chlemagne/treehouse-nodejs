@@ -1,3 +1,4 @@
 {
-    "jwtPrivateKey": "TREEHOUSE_JWT_PKEY"
-  }
+    "jwtPrivateKey": "TREEHOUSE_JWT_PKEY",
+    "db": "MONGODB_URI"
+}
