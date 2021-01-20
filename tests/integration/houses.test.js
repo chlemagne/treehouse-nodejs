@@ -218,11 +218,13 @@ describe('/api/houses', () => {
         // define test variables
         let id;
         let house;
+        let token;
 
         // define happy path
         const _delete = async function() {
             return await request(server)
                 .delete('/api/houses/' + id)
+                .set('x-auth-token', token)
                 .send();
         }
 
@@ -232,10 +234,12 @@ describe('/api/houses', () => {
             await house.save();
 
             id = house._id;
+
+            token = User({ roles: ['admin'] }).genAuthToken();
         });
 
         // verify in mongoDB
-        it('should return 202 and removed house', async () => {
+        it('should be removed in db', async () => {
             await _delete();
 
             const house = await House.findById(id);
@@ -268,6 +272,33 @@ describe('/api/houses', () => {
             const res = await _delete();
 
             expect(res.status).toBe(404);
+        });
+
+        // 401 unauthorized
+        it('should return 401 if NO token is provided', async () => {
+            token = '';
+
+            const res = await _delete();
+
+            expect(res.status).toBe(401);
+        });
+
+        // 403 forbidden
+        it('should return 403 if given token is valid but not admin', async () => {
+            token = User({ roles: ['notAdmin'] }).genAuthToken();
+
+            const res = await _delete();
+
+            expect(res.status).toBe(403);
+        });
+
+        // 400 bad request
+        it('should return 400 if given token is invalid', async () => {
+            token = '1';
+
+            const res = await _delete();
+
+            expect(res.status).toBe(400);
         });
     });
 });
