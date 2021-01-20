@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const houses = require('./routes/houses');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
+const helmet = require('helmet');
+const compression = require('compression');
 require('express-async-errors');
 
 const app = express();
@@ -40,6 +42,12 @@ app.use(function(err, req, res, next) {
     logger.error(err.message, err);
     res.status(500).send('Something went wrong.');
 });
+
+/*******************************************************************************
+*** PRODUCTION
+*******************************************************************************/
+app.use(helmet());
+app.use(compression());
 
 /*******************************************************************************
 *** START MONGODB
