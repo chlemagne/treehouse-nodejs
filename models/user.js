@@ -1,5 +1,7 @@
 const Joi = require('joi');
+const config = require('config');
 const bycrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -38,6 +40,14 @@ const userSchema = new mongoose.Schema({
 userSchema.methods.hashPassword = async function() {
     const salt = await bycrypt.genSalt(10);
     this.password = await bycrypt.hash(this.password, salt);
+};
+
+userSchema.methods.genAuthToken = async function() {
+    const payload = {
+        _id: this.id
+        // add data above this line
+    };
+    return jwt.sign(payload, config.get('jwtPrivateKey'));
 };
 
 const User = mongoose.model('User', userSchema);
