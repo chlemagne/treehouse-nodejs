@@ -35,6 +35,10 @@ const userSchema = new mongoose.Schema({
         minlength: 5,
         maxlength: 1024
     },
+    roles: {
+        type: [String],
+        default: []
+    }
 });
 
 userSchema.methods.hashPassword = async function() {
@@ -44,7 +48,8 @@ userSchema.methods.hashPassword = async function() {
 
 userSchema.methods.genAuthToken = function() {
     const payload = {
-        _id: this.id
+        _id: this.id,
+        roles: this.roles
         // add data above this line
     };
     return jwt.sign(payload, config.get('jwtPrivateKey'));

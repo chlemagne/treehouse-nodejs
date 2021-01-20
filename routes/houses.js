@@ -1,6 +1,7 @@
 const moongose = require('mongoose');
 const express = require('express');
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const {House, houseValidationSchema} = require('../models/house');
 const validateObjectId = require('../middleware/validation/objectid');
 
@@ -58,7 +59,7 @@ router.put('/:id', [auth, validateObjectId], async (req, res) => {
 /*******************************************************************************
 *** DELETE /api/houses/id
 *******************************************************************************/
-router.delete('/:id', [validateObjectId], async (req, res) => {
+router.delete('/:id', [auth, admin, validateObjectId], async (req, res) => {
     const house = await House.findByIdAndDelete(req.params.id);
 
     if (!house) return res.status(404).send('House with the given ID was not found.');
