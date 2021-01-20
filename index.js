@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const houses = require('./routes/houses');
 const users = require('./routes/users');
+const auth = require('./routes/auth');
 require('express-async-errors');
 
 const app = express();
@@ -33,6 +34,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(express.json());
 app.use('/api/houses', houses);
 app.use('/api/users', users);
+app.use('/api/auth', auth);
 // add endpoints before this line
 app.use(function(err, req, res, next) {
     logger.error(err.message, err);
