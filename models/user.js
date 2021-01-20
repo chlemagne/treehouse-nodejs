@@ -42,7 +42,7 @@ userSchema.methods.hashPassword = async function() {
     this.password = await bycrypt.hash(this.password, salt);
 };
 
-userSchema.methods.genAuthToken = async function() {
+userSchema.methods.genAuthToken = function() {
     const payload = {
         _id: this.id
         // add data above this line
