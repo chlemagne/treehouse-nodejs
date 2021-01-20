@@ -31,7 +31,7 @@ describe('/api/auth', () => {
         beforeEach(async function() {
             email = 'mangekyou@outlook.com';
             password = '_eternalT$ukuyum1';
-
+            
             // register test user
             const user = new User({
                 firstName: 'Sasuke',
@@ -40,6 +40,7 @@ describe('/api/auth', () => {
                 email: email,
                 password: password
             });
+            await user.hashPassword();
             await user.save();
         });
 
@@ -72,11 +73,11 @@ describe('/api/auth', () => {
 
         // 401 not found
         it('should return 401 if user password is invalid', async () => {
-            password = '1234';
+            password = '12345';
 
             const res = await login();
 
             expect(res.status).toBe(401);
-        });        
+        });
     });
 });

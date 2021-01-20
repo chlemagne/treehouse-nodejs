@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const bycrypt = require('bcrypt');
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -33,6 +34,11 @@ const userSchema = new mongoose.Schema({
         maxlength: 1024
     },
 });
+
+userSchema.methods.hashPassword = async function() {
+    const salt = await bycrypt.genSalt(10);
+    this.password = await bycrypt.hash(this.password, salt);
+};
 
 const User = mongoose.model('User', userSchema);
 

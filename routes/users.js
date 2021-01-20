@@ -19,8 +19,7 @@ router.post('/', async (req, res) => {
     user = await new User(_.pick(req.body, [
         'firstName', 'lastName', 'middleName', 'email', 'password'
     ]));
-    const salt = await bycrypt.genSalt(10);
-    user.password = await bycrypt.hash(req.body.password, salt);
+    await user.hashPassword();
     await user.save();
 
     res.send(_.pick(user, ['firstName', 'lastName', 'middleName', 'email']));
