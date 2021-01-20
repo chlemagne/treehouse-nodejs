@@ -7,7 +7,11 @@
   "description": "Treehouse Express Backend",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll --verbose --detectOpenHandles"
+    "test": "jest --watchAll --verbose --detectOpenHandles",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "14.15.1"
   },
   "author": "Charlemagne E. Hernani",
   "license": "ISC",
