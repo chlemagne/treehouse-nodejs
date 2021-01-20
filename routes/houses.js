@@ -1,5 +1,6 @@
 const moongose = require('mongoose');
 const express = require('express');
+const auth = require('../middleware/auth');
 const {House, houseValidationSchema} = require('../models/house');
 const validateObjectId = require('../middleware/validation/objectid');
 
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
 /*******************************************************************************
 *** GET /api/houses/id
 *******************************************************************************/
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     const { error } = houseValidationSchema.validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -39,7 +40,7 @@ router.get('/:id', [validateObjectId], async (req, res) => {
 /*******************************************************************************
 *** PUT /api/houses/id
 *******************************************************************************/
-router.put('/:id', [validateObjectId], async (req, res) => {
+router.put('/:id', [auth, validateObjectId], async (req, res) => {
     const { error } = houseValidationSchema.validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
