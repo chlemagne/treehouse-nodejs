@@ -118,13 +118,13 @@ describe('/api/houses', () => {
             expect(res.status).toBe(401);
         });
 
-        // 401 unauthorized
-        it('should return 401 if given token is invalid', async () => {
+        // 400 bad request
+        it('should return 400 if given token is invalid', async () => {
             token = '1';
 
             const res = await post();
 
-            expect(res.status).toBe(401);
+            expect(res.status).toBe(400);
         });
     });
 
@@ -204,13 +204,13 @@ describe('/api/houses', () => {
             expect(res.status).toBe(401);
         });
 
-        // 401 unauthorized
-        it('should return 401 if given token is invalid', async () => {
+        // 400 bad request
+        it('should return 400 if given token is invalid', async () => {
             token = '1';
 
             const res = await put();
 
-            expect(res.status).toBe(401);
+            expect(res.status).toBe(400);
         });
     });
 
