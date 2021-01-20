@@ -1,4 +1,5 @@
 const request = require('supertest');
+const {User} = require('../../models/user');
 const {House} = require('../../models/house');
 const mongoose = require('mongoose');
 
@@ -65,17 +66,20 @@ describe('/api/houses', () => {
     describe('POST /', () => {
         // test variables
         let name;
+        let token;
 
         // define happy path
         const post = async function() {
             return await request(server)
                 .post('/api/houses')
+                .set('x-auth-token', token)
                 .send({ name });
         }
 
         // setup
         beforeEach(function() {
             name = 'Unit G9';
+            token = User().genAuthToken();
         });
 
         // verify in mongoDB
@@ -104,17 +108,37 @@ describe('/api/houses', () => {
 
             expect(res.status).toBe(400);
         });
+
+        // 401 unauthorized
+        it('should return 401 if NO token is provided', async () => {
+            token = '';
+
+            const res = await post();
+
+            expect(res.status).toBe(401);
+        });
+
+        // 401 unauthorized
+        it('should return 401 if given token is invalid', async () => {
+            token = '1';
+
+            const res = await post();
+
+            expect(res.status).toBe(401);
+        });
     });
 
     describe('PUT /id', () => {
         // define test variables
         let id;
         let newName;
+        let token;
 
         // define happy path
         const put = async function() {
             return await request(server)
                 .put('/api/houses/' + id)
+                .set('x-auth-token', token)
                 .send({ name: newName });
         }
 
@@ -125,6 +149,7 @@ describe('/api/houses', () => {
 
             id = house._id;
             newName = 'Unit K7';
+            token = User().genAuthToken();
         });
 
         // verify in mongoDB
@@ -170,6 +195,23 @@ describe('/api/houses', () => {
             expect(res.status).toBe(404);
         });
 
+        // 401 unauthorized
+        it('should return 401 if NO token is provided', async () => {
+            token = '';
+
+            const res = await put();
+
+            expect(res.status).toBe(401);
+        });
+
+        // 401 unauthorized
+        it('should return 401 if given token is invalid', async () => {
+            token = '1';
+
+            const res = await put();
+
+            expect(res.status).toBe(401);
+        });
     });
 
     describe('DELETE /id', () => {
